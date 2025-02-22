@@ -13,6 +13,7 @@ on:
     branches: [master, dev, staging, main-magdeburg]
   # see https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue#triggering-merge-group-checks-with-github-actions
   merge_group:
+  workflow_dispatch:
 
 jobs:
   test:
