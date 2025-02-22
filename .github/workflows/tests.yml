@@ -49,20 +49,20 @@ jobs:
       - run: npm test -- --runInBand --forceExit
       - run: supabase stop
 
-  release:
-    name: semantic-release
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-      - run: npm ci
-      - run: npx semantic-release
-        id: semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#  release:
+#    name: semantic-release
+#    needs: [test]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#        with:
+#          persist-credentials: false
+#      - uses: actions/setup-node@v4
+#        with:
+#          node-version-file: ".nvmrc"
+#      - run: npm ci
+#      - run: npx semantic-release
+#        id: semantic-release
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+#          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
