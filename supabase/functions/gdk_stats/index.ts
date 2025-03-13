@@ -19,7 +19,7 @@ const [SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PUMPS_URL] =
 // It would be too expensive to calculate on each request
 
 // SELECT COUNT(1) FROM trees;
-const TREE_COUNT = 885825;
+const TREE_COUNT = 81929;
 
 // SELECT trees.gattung_deutsch, (COUNT(1) * 100.0) / (SELECT COUNT(1) FROM trees) AS percentage
 // FROM trees
@@ -27,26 +27,26 @@ const TREE_COUNT = 885825;
 // ORDER BY COUNT(1) DESC
 // LIMIT 20;
 const MOST_FREQUENT_TREE_SPECIES: TreeSpecies[] = [
-	{ speciesName: "AHORN", percentage: 22.8128580701605848 },
-	{ speciesName: "LINDE", percentage: 21.5930911861823724 },
-	{ speciesName: "EICHE", percentage: 10.5370699630288149 },
-	{ speciesName: undefined, percentage: 4.1923630513927695 },
-	{ speciesName: "ROBINIE", percentage: 3.9515705698078063 },
-	{ speciesName: "ROSSKASTANIE", percentage: 3.6574944260999633 },
-	{ speciesName: "BIRKE", percentage: 3.610419665283775 },
-	{ speciesName: "HAINBUCHE", percentage: 3.4514717918324726 },
-	{ speciesName: "PLATANE", percentage: 3.3499844777467333 },
-	{ speciesName: "PAPPEL", percentage: 2.8882679987582197 },
-	{ speciesName: "ESCHE", percentage: 2.7732339909124263 },
-	{ speciesName: "KIEFER", percentage: 2.4801738492365874 },
-	{ speciesName: "ULME", percentage: 1.946998560663788 },
-	{ speciesName: "BUCHE", percentage: 1.7521519487483419 },
-	{ speciesName: "HASEL", percentage: 1.1728050122766912 },
-	{ speciesName: "WEIßDORN", percentage: 1.1243755820844975 },
-	{ speciesName: "WEIDE", percentage: 1.0893799565376909 },
-	{ speciesName: "MEHLBEERE", percentage: 0.90469336494228544013 },
-	{ speciesName: "ERLE", percentage: 0.80907628481923630514 },
-	{ speciesName: "APFEL", percentage: 0.70092851296813704739 },
+	{ speciesName: "AHORN", percentage: 23.7461704646706294 },
+	{ speciesName: "LINDE", percentage: 16.2982582479952154 },
+	{ speciesName: "ROBINIE", percentage: 7.8128623564305679 },
+	{ speciesName: "ESCHE", percentage: 7.7005700057366744 },
+	{ speciesName: "EICHE", percentage: 6.8632596516495990 },
+	{ speciesName: "PAPPEL", percentage: 5.5059868910886255 },
+	{ speciesName: "KIRCHE", percentage: 4.9127903428578403 },
+	{ speciesName: "ROSSKASTANIE", percentage: 3.6067814815266877 },
+	{ speciesName: "HAINBUCHE", percentage: 3.3419180021726129 },
+	{ speciesName: "KIEFER", percentage: 2.2153327881458336 },
+	{ speciesName: "ULME", percentage: 2.1823774243552344 },
+	{ speciesName: "BIRNE", percentage: 1.8760145980055902 },
+	{ speciesName: "PLATANE", percentage: 1.8491620793613983 },
+	{ speciesName: "APFEL", percentage: 1.7380902976967862 },
+	{ speciesName: "WEIDE", percentage: 1.4085366597907945 },
+	{ speciesName: "MEHLBEERE", percentage: 1.2815974807455236 },
+	{ speciesName: "BIRKE", percentage: 1.2388775647206728 },
+	{ speciesName: "WEIßDORN", percentage: 1.06067448644558092983 },
+	{ speciesName: "HASEL", percentage: 0.53949151094240134751 },
+	{ speciesName: "WALNUSS", percentage: 0.53827094191311989650 },
 ];
 
 // SELECT COUNT(gattung_deutsch) FROM trees GROUP BY gattung_deutsch;
