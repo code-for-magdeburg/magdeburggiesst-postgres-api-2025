@@ -33,7 +33,7 @@ const MOST_FREQUENT_TREE_SPECIES: TreeSpecies[] = [
 	{ speciesName: "ESCHE", percentage: 7.7005700057366744 },
 	{ speciesName: "EICHE", percentage: 6.8632596516495990 },
 	{ speciesName: "PAPPEL", percentage: 5.5059868910886255 },
-	{ speciesName: "KIRCHE", percentage: 4.9127903428578403 },
+	{ speciesName: "KIRSCHE", percentage: 4.9127903428578403 },
 	{ speciesName: "ROSSKASTANIE", percentage: 3.6067814815266877 },
 	{ speciesName: "HAINBUCHE", percentage: 3.3419180021726129 },
 	{ speciesName: "KIEFER", percentage: 2.2153327881458336 },
