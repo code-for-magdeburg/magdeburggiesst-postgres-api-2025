@@ -50,7 +50,7 @@ const MOST_FREQUENT_TREE_SPECIES: TreeSpecies[] = [
 ];
 
 // SELECT COUNT(gattung_deutsch) FROM trees GROUP BY gattung_deutsch;
-const TOTAL_TREE_SPECIES_COUNT = 97;
+const TOTAL_TREE_SPECIES_COUNT = 73;
 
 const supabaseServiceRoleClient = createClient(
 	SUPABASE_URL,
