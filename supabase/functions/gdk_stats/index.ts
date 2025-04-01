@@ -15,47 +15,62 @@ const ENV_VARS = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY", "PUMPS_URL"];
 const [SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PUMPS_URL] =
 	loadEnvVars(ENV_VARS);
 
-// As trees table barely changes, we can hardcode the values
-// It would be too expensive to calculate on each request
-
-// SELECT COUNT(1) FROM trees;
-const TREE_COUNT = 79385;
-
-// SELECT trees.gattung_deutsch, (COUNT(1) * 100.0) / (SELECT COUNT(1) FROM trees) AS percentage
-// FROM trees
-// GROUP BY trees.gattung_deutsch
-// ORDER BY COUNT(1) DESC
-// LIMIT 20;
-const MOST_FREQUENT_TREE_SPECIES: TreeSpecies[] = [
-	{ speciesName: "AHORN", percentage: 23.6354475026768281 },
-	{ speciesName: "LINDE", percentage: 16.6328651508471374 },
-	{ speciesName: "ROBINIE", percentage: 7.7495748567109655 },
-	{ speciesName: "ESCHE", percentage: 7.7331989670592681 },
-	{ speciesName: "EICHE", percentage: 7.0202179253007495 },
-	{ speciesName: "PAPPEL", percentage: 5.4103420041569566 },
-	{ speciesName: "KIRSCHE", percentage: 4.8623795427347736 },
-	{ speciesName: "ROSSKASTANIE", percentage: 3.6493040246898029 },
-	{ speciesName: "HAINBUCHE", percentage: 3.2877747685330982 },
-	{ speciesName: "ULME", percentage: 2.1754739560370347 },
-	{ speciesName: "KIEFER", percentage: 2.1716949045789507 },
-	{ speciesName: "BIRNE", percentage: 1.9084209863324306 },
-	{ speciesName: "PLATANE", percentage: 1.8706304717515904 },
-	{ speciesName: "APFEL", percentage: 1.6829375826667506 },
-	{ speciesName: "WEIDE", percentage: 1.3869118851168357 },
-	{ speciesName: "BIRKE", percentage: 1.1765446872834918 },
-	{ speciesName: "MEHLBEERE", percentage: 1.1626881652705171 },
-	{ speciesName: "WEIßDORN", percentage: 1.0493166215279965 },
-	{ speciesName: "WALNUSS", percentage: 0.53914467468665364993 },
-	{ speciesName: "HASEL", percentage: 0.53788499086729230963 },
-];
-
-// SELECT COUNT(gattung_deutsch) FROM trees GROUP BY gattung_deutsch;
-const TOTAL_TREE_SPECIES_COUNT = 74;
-
 const supabaseServiceRoleClient = createClient(
 	SUPABASE_URL,
 	SUPABASE_SERVICE_ROLE_KEY
 );
+
+const getMostFrequentTreeSpecies = async (): Promise<TreeSpecies[]> => {
+	const { data, error } = await supabaseServiceRoleClient
+		.from("most_frequent_tree_species")
+		.select("*");
+
+	// rename all fields from gattung_deutsch to speciesName
+	const renamedData = data.map((species) => ({
+		speciesName: species.gattung_deutsch,
+		percentage: species.percentage,
+	}));
+
+	if (error) {
+		throw new GdkError(
+			error.message,
+			ErrorTypes.GdkStatsMostFrequentTreeSpecies
+		);
+	}
+
+	return renamedData;
+};
+
+const getTotalTreeSpeciesCount = async (): Promise<number> => {
+	const { data, error } = await supabaseServiceRoleClient
+		.from("total_tree_species_count")
+		.select("*");
+
+	if (error) {
+		throw new GdkError(error.message, ErrorTypes.GdkStatsTreeSpeciesCount);
+	}
+
+	return data[0].count ?? 0;
+};
+
+const getTreeCount = async (): Promise<number> => {
+	const { data, error } = await supabaseServiceRoleClient
+		.from("trees_count")
+		.select("count");
+
+	if (error) {
+		throw new GdkError(error.message, ErrorTypes.GdkStatsTreeCount);
+	}
+
+	if (data === null) {
+		throw new GdkError(
+			"Could not fetch count of trees_count table",
+			ErrorTypes.GdkStatsTreeCount
+		);
+	}
+
+	return data[0].count ?? 0;
+};
 
 const getUserProfilesCount = async (): Promise<number> => {
 	const { count } = await supabaseServiceRoleClient
@@ -181,6 +196,9 @@ const handler = async (request: Request): Promise<Response> => {
 			monthlyWaterings,
 			waterings,
 			monthlyWeather,
+			treeCount,
+			totalTreeSpeciesCount,
+			mostFrequentTreeSpecies,
 		] = await Promise.all([
 			getUserProfilesCount(),
 			getWateringsCount(),
@@ -189,17 +207,20 @@ const handler = async (request: Request): Promise<Response> => {
 			getMonthlyWaterings(),
 			getWaterings(),
 			getMonthlyWeather(),
+			getTreeCount(),
+			getTotalTreeSpeciesCount(),
+			getMostFrequentTreeSpecies(),
 		]);
 
 		const stats: GdkStats = {
-			numTrees: TREE_COUNT,
+			numTrees: treeCount,
 			numPumps: numPumps,
 			numActiveUsers: usersCount,
 			numWateringsThisYear: wateringsCount,
 			monthlyWaterings: monthlyWaterings,
 			treeAdoptions: treeAdoptions,
-			mostFrequentTreeSpecies: MOST_FREQUENT_TREE_SPECIES,
-			totalTreeSpeciesCount: TOTAL_TREE_SPECIES_COUNT,
+			mostFrequentTreeSpecies: mostFrequentTreeSpecies,
+			totalTreeSpeciesCount: totalTreeSpeciesCount,
 			waterings: waterings,
 			monthlyWeather: monthlyWeather,
 		};
